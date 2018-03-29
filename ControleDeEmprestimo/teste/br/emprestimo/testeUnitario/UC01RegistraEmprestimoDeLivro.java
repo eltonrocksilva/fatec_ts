@@ -1,6 +1,8 @@
 package br.emprestimo.testeUnitario;
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,6 +33,7 @@ public class UC01RegistraEmprestimoDeLivro {
 		usuario.setRa("11111");
 		usuario.setNome("Jose da Silva");
 		servico = new ServicoEmprestimo();
+		emprestimo = new Emprestimo();
 	}
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
@@ -62,8 +65,29 @@ public class UC01RegistraEmprestimoDeLivro {
 		//verificacao
 	    assertTrue(dataEsperada.equals(dataObtida));
 	}
+	
+	@Test(expected=RuntimeException.class)
+	public void CT05UC01CadastrarLivro_com_livro_nulo() {
+		emprestimo.setLivro(null);
+	}
+	@Test(expected=RuntimeException.class)
+	public void CT06UC01CadastrarLivro_com_usuario_nulo() {
+		emprestimo.setUsuario(null);
+	}
+	@Test(expected=ParseException.class)
+	public void CT07UC01CadastrarLivro_com_data_invalida() {
+		emprestimo.validaData("31/31/2018");
+	}
+	@Test(expected=ParseException.class)
+	public void CT08UC01CadastrarLivro_com_data_valida() {
+		emprestimo.validaData("31/12/2018");
+	}
+	@Test(expected=RuntimeException.class)
+	public void CT09UC01CadastrarLivro_com_data_invalida() {
+		emprestimo.setDataEmprestimo("31/31/2018");
+	}
 	@Test
-	public void CT05Verificar_o_metodo_getRA() {
-		assertEquals("11111", usuario.getRa());
+	public void CT10UC01CadastrarLivro_com_data_valida() {
+		emprestimo.setDataEmprestimo("31/12/2018");
 	}
 }
